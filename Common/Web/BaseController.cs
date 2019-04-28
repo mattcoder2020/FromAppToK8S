@@ -30,6 +30,34 @@ namespace Common.Web
             this.tracer = tracer;  //Jaeger
         }
 
+        protected async Task<IActionResult> SendAsync<T>(T command,
+           Guid? resourceId = null, string resource = "") where T : ICommand
+        {
+            var context = GetContext<T>(resourceId, resource);
+            await _busPublisher.SendAsync(command, context);
+
+            return Accepted(context);
+        }
+
+        protected ICorrelationContext GetContext<T>(Guid? resourceId = null, string resource = "") where T : ICommand
+        {
+            if (!string.IsNullOrWhiteSpace(resource))
+            {
+                resource = $"{resource}/{resourceId}";
+            }
+
+            return CorrelationContext.Create<T>(
+                Guid.NewGuid(),
+                UserId,
+                resourceId ?? Guid.Empty,
+                HttpContext.TraceIdentifier,
+                HttpContext.Connection.Id,
+                tracer.ActiveSpan.Context.ToString(),  //Jaeger
+                Request.Path.ToString(),
+                Culture,
+                resource);
+        }
+
         protected IActionResult Single<T>(T model, Func<T, bool> criteria = null)
         {
             if (model == null)
@@ -66,15 +94,7 @@ namespace Common.Web
             return Ok(pagedResult.Items);
         }
 
-        protected async Task<IActionResult> SendAsync<T>(T command,
-            Guid? resourceId = null, string resource = "") where T : ICommand
-        {
-            var context = GetContext<T>(resourceId, resource);
-            await _busPublisher.SendAsync(command, context);
-
-            return Accepted(context);
-        }
-
+       
         protected IActionResult Accepted(ICorrelationContext context)
         {
             Response.Headers.Add(OperationHeader, $"operations/{context.Id}");
@@ -86,21 +106,7 @@ namespace Common.Web
             return base.Accepted();
         }
 
-        protected ICorrelationContext GetContext<T>(Guid? resourceId = null, string resource = "") where T : ICommand
-        {
-            if (!string.IsNullOrWhiteSpace(resource))
-            {
-                resource = $"{resource}/{resourceId}";
-            }
-
-            return CorrelationContext.Create<T>(Guid.NewGuid(), 
-                UserId, 
-                resourceId ?? Guid.Empty,
-               HttpContext.TraceIdentifier,
-               tracer.ActiveSpan.Context.ToString(),  //Jaeger
-               HttpContext.Connection.Id,
-               Request.Path.ToString(), Culture, resource);
-        }
+       
 
         protected bool IsAdmin
             => User.IsInRole("admin");

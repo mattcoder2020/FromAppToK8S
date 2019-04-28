@@ -59,11 +59,13 @@ namespace Common.RabbitMQ
                 => new CorrelationContext(id);
 
             public static ICorrelationContext From<T>(ICorrelationContext context)
-                => Create<T>(context.Id, context.UserId, context.ResourceId, context.TraceId, context.ConnectionId,
-                    context.Origin, context.Culture, context.Resource);
+                => Create<T>(context.Id, context.UserId, context.ResourceId, context.Origin, 
+                    context.TraceId, context.SpanContext, context.ConnectionId,
+                     context.Culture, context.Resource);
 
             public static ICorrelationContext Create<T>(Guid id, Guid userId, Guid resourceId, string origin,
-                string traceId, string spanContext, string connectionId, string culture, string resource = "")
+                string traceId, string spanContext, string connectionId, 
+                string culture, string resource = "")
                 => new CorrelationContext(id, userId, resourceId, traceId, spanContext, connectionId, string.Empty, typeof(T).Name, origin, culture,
                     resource, 0);
 

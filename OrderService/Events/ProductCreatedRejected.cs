@@ -1,4 +1,5 @@
 ﻿using Common.Messages;
+using Common.RabbitMQ;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace OrderService.Events
     {
         public string  Reason { get; set; }
         public string Code { get; set; }
+        public ICorrelationContext Context { get; set; }
     }
 }

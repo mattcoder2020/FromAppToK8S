@@ -1,4 +1,5 @@
 ﻿using Common.Logging;
+using Common.Metrics;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
@@ -15,6 +16,7 @@ namespace DynamicDI
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseLogging();
+                .UseLogging().UseAppMetrics();
+          
     }
 }

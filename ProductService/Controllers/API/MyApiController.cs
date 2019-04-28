@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Common.Metrics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,7 @@ namespace ProductService.Controllers.API
     {
         // GET: api/MyApi
         [HttpGet]
+        [AppMetricCount(MetricName: "get-myapi")]
         public ActionResult Get()
         {
             return Ok(new { Name = "value2", Id=1 });

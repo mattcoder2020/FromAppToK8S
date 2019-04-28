@@ -3,6 +3,7 @@ using Common.RabbitMQ;
 using Common.Repo;
 using ProductService.Commands;
 using ProductService.Events;
+//using ProductService.Metrics;
 using ProductService.Models;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,9 +13,13 @@ namespace ProductService.CommandHandlers
     public class NewProductCommandHandler : ICommandHandler<NewProductCommand>
     {
         IBusPublisher _busPublisher;
-        public NewProductCommandHandler(IBusPublisher busPublisher)
+       // IMetricRegistry appMetric;
+        public NewProductCommandHandler(IBusPublisher busPublisher
+            //, IMetricRegistry AppMetric
+            )
         {
             _busPublisher = busPublisher;
+            //appMetric = AppMetric;
         } 
         public async Task  HandleAsync(NewProductCommand command, ICorrelationContext context)
         {
@@ -30,8 +35,9 @@ namespace ProductService.CommandHandlers
             {
                 //Send rejected bus message
             }
-            
-            
+            //appMetric.IncrementPostProductCount(); // 
+
+
         }
     }
 }

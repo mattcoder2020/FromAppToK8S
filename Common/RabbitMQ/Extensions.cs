@@ -24,7 +24,10 @@ namespace Common.RabbitMQ
 {
     public static class Extensions
     {
-         public static void AddRabbitMq(this ContainerBuilder builder)
+        public static IBusSubscriber UseRabbitMq(this IApplicationBuilder app)
+            => new BusSubscriber(app);
+
+        public static void AddRabbitMq(this ContainerBuilder builder)
         {
             builder.Register(context =>
             {
@@ -53,7 +56,8 @@ namespace Common.RabbitMQ
                 .InstancePerDependency();
             builder.RegisterType<BusPublisher>().As<IBusPublisher>()
                 .InstancePerDependency();
-           
+            builder.RegisterInstance(DefaultTracer.Create()).As<ITracer>().SingleInstance()
+                .PreserveExistingDefaults();
 
             ConfigureBus(builder);
         }
@@ -65,7 +69,7 @@ namespace Common.RabbitMQ
                 var options = context.Resolve<RabbitMqOptions>();
                 var configuration = context.Resolve<RawRabbitConfiguration>();
                 var namingConventions = new CustomNamingConventions(options.Namespace);
-                var tracer = context.Resolve<ITracer>();  //Jaeger
+                var tracer = context.Resolve<ITracer>();
 
                 return RawRabbitFactory.CreateInstanceFactory(new RawRabbitOptions
                 {
@@ -74,6 +78,7 @@ namespace Common.RabbitMQ
                         ioc.AddSingleton(options);
                         ioc.AddSingleton(configuration);
                         ioc.AddSingleton<INamingConventions>(namingConventions);
+                        ioc.AddSingleton(tracer);
                     },
                     Plugins = p => p
                         .UseAttributeRouting()
@@ -81,7 +86,7 @@ namespace Common.RabbitMQ
                         .UpdateRetryInfo()
                         .UseMessageContext<CorrelationContext>()
                         .UseContextForwarding()
-                        .UseJaeger(tracer) //Jaeger 
+                        .UseJaeger(tracer)
                 });
             }).SingleInstance();
             builder.Register(context => context.Resolve<IInstanceFactory>().Create());
@@ -138,8 +143,5 @@ namespace Common.RabbitMQ
 
             return clientBuilder;
         }
-
-        public static IBusSubscriber UseRabbitMq(this IApplicationBuilder app)
-            => new BusSubscriber(app);
     }
 }

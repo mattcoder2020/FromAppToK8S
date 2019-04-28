@@ -8,9 +8,6 @@ using Microsoft.Extensions.Logging;
 using OpenTracing;
 using OpenTracing.Util;
 using RawRabbit.Instantiation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Common.Jaeger
 {
@@ -53,7 +50,7 @@ namespace Common.Jaeger
                     .WithSampler(sampler)
                     .Build();
 
-                GlobalTracer.Register(tracer);
+               GlobalTracer.Register(tracer);
 
                 return tracer;
             });

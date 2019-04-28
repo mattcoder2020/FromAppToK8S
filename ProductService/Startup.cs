@@ -13,6 +13,12 @@ using Autofac.Extensions.DependencyInjection;
 using Common.RabbitMQ;
 using Common.Dispatcher;
 using Common.Jaeger;
+using App.Metrics.Registry;
+//using ProductService.Metrics;
+using System.Linq;
+using Common.Metrics;
+using Common.Web;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ProductService
 {
@@ -35,18 +41,35 @@ namespace ProductService
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
+            services.AddTransient<IMetricRegistry, MetricRegistry>();
             services.AddConsul();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+              //  .AddControllersAsServices();
             services.AddJaeger();
             services.AddOpenTracing();
+
             
             var builder = new ContainerBuilder();
+            builder.Populate(services);
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
                 .AsImplementedInterfaces();
-            builder.AddDispatcher();
-            builder.Populate(services);
+            //builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
+            //   .AsImplementedInterfaces();
+           
+          
+
+            //property injection in controller
+            //var controllersTypesInAssembly = typeof(Startup).Assembly.GetExportedTypes()
+            //.Where(type => typeof(ActionFilterAttribute).IsAssignableFrom(type)).ToArray();
+            //builder.RegisterTypes(controllersTypesInAssembly).PropertiesAutowired();
+            //builder.RegisterType<AppMetricCountAttribute>().PropertiesAutowired();
+    //        builder.Register(x => new MetricRegistry())
+    //.As<IMetricRegistry>()
+    //.InstancePerHttpRequest();
+           
+
             builder.AddRabbitMq();
+            builder.AddDispatcher();
             Container = builder.Build();
 
             return new AutofacServiceProvider(Container);

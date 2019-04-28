@@ -1,4 +1,5 @@
 ﻿using Common.Messages;
+using Common.RabbitMQ;
 using System;
 
 namespace OrderService.Events
@@ -8,5 +9,6 @@ namespace OrderService.Events
     {
         public int Id { get; set; }
         public String Name { get; set; }
+        public ICorrelationContext Context { get; set; }
     }
 }

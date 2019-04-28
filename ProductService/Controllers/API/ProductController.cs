@@ -5,13 +5,15 @@ using System.Threading.Tasks;
 using Autofac;
 using Common.Dispacher;
 using Common.Dispatcher;
+using Common.Metrics;
 using Common.RabbitMQ;
 using Common.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OpenTracing;
 using ProductService.Commands;
-using ProductService.Models;
+//using ProductService.Metrics;
+//using ProductService.Models;
 
 namespace ProductService.Controllers.API
 {
@@ -29,6 +31,7 @@ namespace ProductService.Controllers.API
         }
         // POST: api/Product
         [HttpPost]
+        [AppMetricCount(MetricName: "post-new-product")]
         public async void Post([FromBody] NewProductCommand value)
         {
             //IDispatcher dispatch = _componentContext.Resolve<ICommandDispatcher>();
