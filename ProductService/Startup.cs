@@ -41,32 +41,19 @@ namespace ProductService
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
             services.AddTransient<IMetricRegistry, MetricRegistry>();
             services.AddConsul();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-              //  .AddControllersAsServices();
             services.AddJaeger();
             services.AddOpenTracing();
-
-            
+           
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
                 .AsImplementedInterfaces();
-            //builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
-            //   .AsImplementedInterfaces();
-           
-          
-
-            //property injection in controller
-            //var controllersTypesInAssembly = typeof(Startup).Assembly.GetExportedTypes()
-            //.Where(type => typeof(ActionFilterAttribute).IsAssignableFrom(type)).ToArray();
-            //builder.RegisterTypes(controllersTypesInAssembly).PropertiesAutowired();
-            //builder.RegisterType<AppMetricCountAttribute>().PropertiesAutowired();
-    //        builder.Register(x => new MetricRegistry())
-    //.As<IMetricRegistry>()
-    //.InstancePerHttpRequest();
-           
+            //builder.RegisterAssemblyTypes(Assembly.GetCallingAssembly())
+            //    .AsImplementedInterfaces();
 
             builder.AddRabbitMq();
             builder.AddDispatcher();
