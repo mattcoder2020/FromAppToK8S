@@ -42,11 +42,13 @@ namespace ProductService
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddTransient<IMetricRegistry, MetricRegistry>();
+            
             services.AddConsul();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddJaeger();
             services.AddOpenTracing();
+            services.AddGaugeMetric();
+            
            
             var builder = new ContainerBuilder();
             builder.Populate(services);

@@ -4,6 +4,9 @@ using App.Metrics.AspNetCore;
 using App.Metrics.AspNetCore.Health;
 using App.Metrics.Formatters.Prometheus;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Common.Metrics
 {
@@ -86,6 +89,29 @@ namespace Common.Metrics
                   };
 
               });
+
+        public static IServiceCollection AddGaugeMetric(this IServiceCollection service)
+        {
+            GaugeOption option;
+            using (var serviceprovider = service.BuildServiceProvider())
+            {
+                var configuration = serviceprovider.GetService<IConfiguration>();
+                service.Configure<GaugeOption>(configuration.GetSection("gaugemetric"));
+                option = configuration.GetOptions<GaugeOption>("gaugemetric");
+            }
+
+            //IF THESE TYPE ARE NOT FROM EXECUTING ASSEMBLY BUT FROM REFERENCED ASEMBLY
+            //THEN ADDING TO SERVICE DI ONE BY ONE IS NECESSARY
+            service.AddTransient<IMetricRegistry, MetricRegistry>();
+            service.AddSingleton(option.GetType(), option); 
+            service.AddTransient<GaugeMetric>();
+            service.AddSingleton<IHostedService, GaugeHostedService>();
+          
+            return service;
+
+        }
     }
+
+    
 }
 

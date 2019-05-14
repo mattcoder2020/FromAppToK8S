@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Autofac;
 using Common.Handlers;
 using Common.Messages;
-using Common.RabbitMQ;
+
 
 namespace Common.Dispacher
 {

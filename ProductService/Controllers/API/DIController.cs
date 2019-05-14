@@ -8,6 +8,7 @@ using ProductService.Query;
 using ProductService.QueryHandler;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProductService.AutofacTest;
 
 namespace ProductService.Controllers
 {
@@ -24,16 +25,19 @@ namespace ProductService.Controllers
         [HttpGet]
         public IActionResult foo()
         {
+            var dto = new DTO();
+            var controller = new ApiFileSendingController(dto);
+            controller.Send(null);
             return Ok("123");
         }
    
-        [HttpGet]
-        public IActionResult GetAll([FromQuery] GetAllQuery query)
-        {
-            var handleType = typeof(IQueryHandler<,>).MakeGenericType(query.GetType(), typeof(List<DemoModel>));
-            dynamic QueryHandler = _context.Resolve(handleType);
-            return new JsonResult(QueryHandler.execute((dynamic)query));
-         }
+        //[HttpGet]
+        //public IActionResult GetAll([FromQuery] GetAllQuery query)
+        //{
+        //    var handleType = typeof(IQueryHandler<,>).MakeGenericType(query.GetType(), typeof(List<DemoModel>));
+        //    dynamic QueryHandler = _context.Resolve(handleType);
+        //    return new JsonResult(QueryHandler.execute((dynamic)query));
+        // }
 
         [HttpPost]
         [Route("One")]
