@@ -35,12 +35,12 @@ namespace ProductService
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+            //services.Configure<CookiePolicyOptions>(options =>
+            //{
+            //    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+            //    options.CheckConsentNeeded = context => true;
+            //    options.MinimumSameSitePolicy = SameSiteMode.None;
+            //});
 
             
             services.AddConsul();
@@ -54,9 +54,7 @@ namespace ProductService
             builder.Populate(services);
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
                 .AsImplementedInterfaces();
-            //builder.RegisterAssemblyTypes(Assembly.GetCallingAssembly())
-            //    .AsImplementedInterfaces();
-
+            
             builder.AddRabbitMq();
             builder.AddDispatcher();
             Container = builder.Build();
@@ -77,8 +75,8 @@ namespace ProductService
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
-            app.UseCookiePolicy();
+            //app.UseStaticFiles();
+            //app.UseCookiePolicy();
             app.UseRabbitMq();
            
 
