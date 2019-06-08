@@ -3,6 +3,7 @@ using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Common.Jaeger;
+using Common.Messages;
 using Common.Metrics;
 using Common.RabbitMQ;
 using Microsoft.AspNetCore.Builder;
@@ -31,7 +32,6 @@ namespace DynamicDI
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
@@ -39,14 +39,14 @@ namespace DynamicDI
             services.AddJaeger();
             services.AddOpenTracing();
             services.AddGaugeMetric();
-           // services.AddConsul();
+         // services.AddConsul();
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
                 .AsImplementedInterfaces();
             builder.Populate(services);
-            builder.AddRabbitMq();
+            //builder.AddRabbitMq();
+            builder.AddMessageService(services);
             Container = builder.Build();
-            
             return new AutofacServiceProvider(Container);
         }
 
@@ -54,17 +54,17 @@ namespace DynamicDI
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+            //app.UseRabbitMq().SubscribeEvent<ProductCreated>(@namespace : "matt-product", 
+            //    onError: (message, exception)=>new ProductCreatedRejected { Code=message.Id.ToString(), Reason=exception.Message} );
 
-            app.UseRabbitMq().SubscribeEvent<ProductCreated>(@namespace : "matt-product", 
-                onError: (message, exception)=>new ProductCreatedRejected { Code=message.Id.ToString(), Reason=exception.Message} );
+            app.UseMessageService().SubscribeEvent<ProductCreated>(@namespace: "mytopic", queueName : "order_productcreated",
+                onError: (message, exception) => new ProductCreatedRejected { Code = message.Id.ToString(), Reason = exception.Message });
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();

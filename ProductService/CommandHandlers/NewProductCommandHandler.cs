@@ -1,5 +1,5 @@
 ﻿using Common.Handlers;
-using Common.RabbitMQ;
+using Common.Messages;
 using Common.Repo;
 using ProductService.Commands;
 using ProductService.Events;
@@ -12,13 +12,15 @@ namespace ProductService.CommandHandlers
 {
     public class NewProductCommandHandler : ICommandHandler<NewProductCommand>
     {
-        IBusPublisher _busPublisher;
-       // IMetricRegistry appMetric;
-        public NewProductCommandHandler(IBusPublisher busPublisher
+        private readonly IMessageBrokerFactory _messageBrokerFactory;
+
+        // IBusPublisher _busPublisher;
+        // IMetricRegistry appMetric;
+        public NewProductCommandHandler(IMessageBrokerFactory messageBrokerFactory
             //, IMetricRegistry AppMetric
             )
         {
-            _busPublisher = busPublisher;
+            _messageBrokerFactory = messageBrokerFactory;
             //appMetric = AppMetric;
         } 
         public async Task  HandleAsync(NewProductCommand command, ICorrelationContext context)
@@ -29,7 +31,7 @@ namespace ProductService.CommandHandlers
                 DataStore<Product>.GetInstance().AddRecord
                     (new Product(command.Id, command.Name, command.Category, command.Price));
                 //Send product created event bus msg
-                await _busPublisher.PublishAsync<ProductCreated>( new ProductCreated { Id = command.Id, Name = command.Name, Context = context }, context);
+                await _messageBrokerFactory.Publisher.PublishAsync<ProductCreated>( new ProductCreated { Id = command.Id, Name = command.Name }, context);
             }
             else
             {

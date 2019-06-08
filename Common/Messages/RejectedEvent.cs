@@ -10,7 +10,7 @@ namespace Common.Messages
     {
         public string Reason { get; }
         public string Code { get; }
-        public ICorrelationContext Context { get ; set; }
+       // public ICorrelationContext Context { get ; set; }
 
         [JsonConstructor]
         public RejectedEvent(string reason, string code)

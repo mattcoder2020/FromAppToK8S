@@ -25,7 +25,7 @@ namespace Common.RabbitMQ
     public static class Extensions
     {
         public static IBusSubscriber UseRabbitMq(this IApplicationBuilder app)
-            => new BusSubscriber(app);
+            => new BusSubscriber(app.ApplicationServices);
 
         public static void AddRabbitMq(this ContainerBuilder builder)
         {

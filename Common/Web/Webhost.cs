@@ -57,50 +57,5 @@ namespace Common.Web
             return builder;
         }
 
-        //internal static void ConfigureWebDefaults(IWebHostBuilder builder)
-        //{
-        //    builder.UseKestrel((builderContext, options) =>
-        //    {
-        //        options.Configure(builderContext.Configuration.GetSection("Kestrel"));
-        //    })
-        //    .ConfigureServices((hostingContext, services) =>
-        //    {
-        //        // Fallback
-        //        services.PostConfigure<HostFilteringOptions>(options =>
-        //        {
-        //            if (options.AllowedHosts == null || options.AllowedHosts.Count == 0)
-        //            {
-        //                // "AllowedHosts": "localhost;127.0.0.1;[::1]"
-        //                var hosts = hostingContext.Configuration["AllowedHosts"]?.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-        //                // Fall back to "*" to disable.
-        //                options.AllowedHosts = (hosts?.Length > 0 ? hosts : new[] { "*" });
-        //            }
-        //        });
-        //        // Change notification
-        //        services.AddSingleton<IOptionsChangeTokenSource<HostFilteringOptions>>(
-        //                    new ConfigurationChangeTokenSource<HostFilteringOptions>(hostingContext.Configuration));
-
-        //        services.AddTransient<IStartupFilter, HostFilteringStartupFilter>();
-
-        //        if (string.Equals("true", hostingContext.Configuration["ForwardedHeaders_Enabled"], StringComparison.OrdinalIgnoreCase))
-        //        {
-        //            services.Configure<ForwardedHeadersOptions>(options =>
-        //            {
-        //                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-        //                // Only loopback proxies are allowed by default. Clear that restriction because forwarders are
-        //                // being enabled by explicit configuration.
-        //                options.KnownNetworks.Clear();
-        //                options.KnownProxies.Clear();
-        //            });
-
-        //            services.AddTransient<IStartupFilter, ForwardedHeadersStartupFilter>();
-        //        }
-
-        //        services.AddRouting();
-        //    })
-        //    .UseIIS()
-        //    .UseIISIntegration();
-        //}
-
     }
 }

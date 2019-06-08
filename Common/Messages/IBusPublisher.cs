@@ -1,7 +1,7 @@
 ﻿using Common.Messages;
 using System.Threading.Tasks;
 
-namespace Common.RabbitMQ
+namespace Common.Messages
 {
     public interface IBusPublisher
     {

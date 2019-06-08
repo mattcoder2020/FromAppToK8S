@@ -23,13 +23,13 @@ namespace Common.RabbitMQ
         public async Task SendAsync<TCommand>(TCommand command, ICorrelationContext context)
             where TCommand : ICommand
             //=> await _busClient.PublishAsync(command, ctx => ctx.UseMessageContext(context)
-            => await _busClient.PublishAsync(command, ctx => ctx.UseMessageContext(command.Context)
+            => await _busClient.PublishAsync(command, ctx => ctx.UseMessageContext(context)
                 .UsePublishConfiguration(p => p.WithRoutingKey(GetRoutingKey(@command))));
 
         public async Task PublishAsync<TEvent>(TEvent @event, ICorrelationContext context)
             where TEvent : IEvent
             //=> await _busClient.PublishAsync(@event, ctx => ctx.UseMessageContext(context)
-              => await _busClient.PublishAsync(@event, ctx => ctx.UseMessageContext(@event.Context)
+              => await _busClient.PublishAsync(@event, ctx => ctx.UseMessageContext(context)
                 .UsePublishConfiguration(p => p.WithRoutingKey(GetRoutingKey(@event))));
 
         private string GetRoutingKey<T>(T message)

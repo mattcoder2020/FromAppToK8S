@@ -15,38 +15,40 @@ using OpenTracing;
 
 namespace Common.RabbitMQ
 {
-    public class BusSubscriber : IBusSubscriber
+    public class BusSubscriber : BaseSubscriber, IBusSubscriber
     {
-        private readonly ILogger _logger;
+       
         private readonly IBusClient _busClient;
         private readonly IServiceProvider _serviceProvider;
         private readonly string _defaultNamespace;
-        private readonly int _retries;
-        private readonly int _retryInterval;
-        private readonly ITracer _tracer;
+      
 
-        public BusSubscriber(IApplicationBuilder app)
+        public BusSubscriber(IServiceProvider provider) : base(provider)
         {
-            _logger = app.ApplicationServices.GetService<ILogger<BusSubscriber>>();
-            _serviceProvider = app.ApplicationServices.GetService<IServiceProvider>();
+            _logger = provider.GetService<ILogger<BusSubscriber>>();
+            _serviceProvider = provider.GetService<IServiceProvider>();
             _busClient = _serviceProvider.GetService<IBusClient>();
             var options = _serviceProvider.GetService<RabbitMqOptions>();
             _defaultNamespace = options.Namespace;
             _retries = options.Retries >= 0 ? options.Retries : 3;
             _retryInterval = options.RetryInterval > 0 ? options.RetryInterval : 2;
-            _tracer = _serviceProvider.GetService<ITracer>();
+           
         }
 
         public IBusSubscriber SubscribeCommand<TCommand>(string @namespace = null, string queueName = null,
             Func<TCommand, Exception, IRejectedEvent> onError = null)
             where TCommand : ICommand
         {
-            _busClient.SubscribeAsync<TCommand, CorrelationContext>(async (command, correlationContext) =>
+             _busClient.SubscribeAsync<TCommand, CorrelationContext>(async (command, correlationContext) =>
             {
                 var commandHandler = _serviceProvider.GetService<ICommandHandler<TCommand>>();
 
-                return await TryHandleAsync(command, correlationContext,
+                //return await TryHandleAsync(command, correlationContext,
+                //    () => commandHandler.HandleAsync(command, correlationContext), onError);
+
+                await BaseTryHandleAsync(command, correlationContext,
                     () => commandHandler.HandleAsync(command, correlationContext), onError);
+                return new Ack();
             },
                 ctx => ctx.UseSubscribeConfiguration(cfg =>
                     cfg.FromDeclaredQueue(q => q.WithName(GetQueueName<TCommand>(@namespace, queueName)))));
@@ -54,16 +56,18 @@ namespace Common.RabbitMQ
             return this;
         }
 
-        public IBusSubscriber SubscribeEvent<TEvent>(string @namespace = null, string queueName = null,
+        public async Task<IBusSubscriber> SubscribeEvent<TEvent>(string @namespace = null, string queueName = null,
             Func<TEvent, Exception, IRejectedEvent> onError = null)
             where TEvent : IEvent
         {
-            _busClient.SubscribeAsync<TEvent, CorrelationContext>(async (@event, correlationContext) =>
+            await _busClient.SubscribeAsync<TEvent, CorrelationContext>(async (@event, correlationContext) =>
             {
                 var eventHandler = _serviceProvider.GetService<IEventHandler<TEvent>>();
-
-                return await TryHandleAsync(@event, correlationContext,
+                 
+                //return await TryHandleAsync(@event, correlationContext,
+                await BaseTryHandleAsync(@event, correlationContext,
                     () => eventHandler.HandleAsync(@event, correlationContext), onError);
+                return new Ack(); 
             },
                 ctx => ctx.UseSubscribeConfiguration(cfg =>
                     cfg.FromDeclaredQueue(q => q.WithName(GetQueueName<TEvent>(@namespace, queueName)))));
@@ -71,65 +75,7 @@ namespace Common.RabbitMQ
             return this;
         }
 
-        // Internal retry for services that subscribe to the multiple events of the same types.
-        // It does not interfere with the routing keys and wildcards (see TryHandleWithRequeuingAsync() below).
-        private async Task<Acknowledgement> TryHandleAsync<TMessage>(TMessage message,
-            CorrelationContext correlationContext,
-            Func<Task> handle, Func<TMessage, Exception, IRejectedEvent> onError = null)
-        {
-            var currentRetry = 0;
-            var retryPolicy = Policy
-                .Handle<Exception>()
-                .WaitAndRetryAsync(_retries, i => TimeSpan.FromSeconds(_retryInterval));
-
-            var messageName = message.GetType().Name;
-
-            return await retryPolicy.ExecuteAsync<Acknowledgement>(async ()=>
-            {
-                try
-                {
-                    var scope = _tracer.BuildSpan("Handling " + messageName).AsChildOf(_tracer.ActiveSpan).StartActive();
-                    using (scope) { 
-                    var retryMessage = currentRetry == 0
-                        ? string.Empty
-                        : $"Retry: {currentRetry}'.";
-                    _logger.LogInformation($"Handling a message: '{messageName}' " +
-                                           $"with correlation id: '{correlationContext.Id}'. {retryMessage}");
-
-                    await handle();
-
-                    _logger.LogInformation($"Handled a message: '{messageName}' " +
-                                           $"with correlation id: '{correlationContext.Id}'. {retryMessage}");
-
-                    return new Ack();
-                    }
-                }
-                //catch (CustomizedException<IEventHandler<IEvent>> exception)
-                //{
-                //    System.Diagnostics.Debug.WriteLine(exception.Message);
-                //    return new Ack();
-                //}
-                catch (Exception exception)
-                {
-                    currentRetry++;
-                   
-                    _logger.LogError(exception, exception.Message);
-                    if (exception.GetType().FullName.Contains("CustomizedException") && onError != null)
-                    {
-                        var rejectedEvent = onError(message, exception);
-                        await _busClient.PublishAsync(rejectedEvent, ctx => ctx.UseMessageContext(correlationContext));
-                        _logger.LogInformation($"Published a rejected event: '{rejectedEvent.GetType().Name}' " +
-                                               $"for the message: '{messageName}' with correlation id: '{correlationContext.Id}'.");
-
-                        return new Ack();
-                    }
-
-                    throw new Exception($"Unable to handle a message: '{messageName}' " +
-                                        $"with correlation id: '{correlationContext.Id}', " +
-                                        $"retry {currentRetry - 1}/{_retries}...");
-                }
-            });
-        }
+       
 
         // RabbitMQ retry that will publish a message to the retry queue.
         // Keep in mind that it might get processed by the other services using the same routing key and wildcards.

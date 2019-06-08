@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Common.RabbitMQ
+namespace Common.Messages
 {
     using System;
     using Newtonsoft.Json;

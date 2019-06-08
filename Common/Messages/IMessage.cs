@@ -18,6 +18,6 @@ namespace Common.Messages
     { }
     public interface IMessage
     {
-        ICorrelationContext Context { get; set; }
+       // ICorrelationContext Context { get; set; }
     }
 }

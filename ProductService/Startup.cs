@@ -19,6 +19,7 @@ using System.Linq;
 using Common.Metrics;
 using Common.Web;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Common.Messages;
 
 namespace ProductService
 {
@@ -54,8 +55,8 @@ namespace ProductService
             builder.Populate(services);
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
                 .AsImplementedInterfaces();
-            
-            builder.AddRabbitMq();
+
+            builder.AddMessageService(services);//.AddRabbitMq();
             builder.AddDispatcher();
             Container = builder.Build();
 
@@ -77,7 +78,8 @@ namespace ProductService
 
             //app.UseStaticFiles();
             //app.UseCookiePolicy();
-            app.UseRabbitMq();
+            //app.UseRabbitMq();
+            app.UseMessageService();
            
 
             app.UseMvc(

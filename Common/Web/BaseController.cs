@@ -24,9 +24,10 @@ namespace Common.Web
         private readonly IBusPublisher _busPublisher;
         private readonly ITracer tracer;
 
-        public BaseController(IBusPublisher busPublisher, ITracer tracer)
+        public BaseController(ITracer tracer)
+        // public BaseController(IBusPublisher busPublisher, ITracer tracer)
         {
-            _busPublisher = busPublisher;
+            //_busPublisher = busPublisher;
             this.tracer = tracer;  //Jaeger
         }
 
@@ -34,7 +35,7 @@ namespace Common.Web
            Guid? resourceId = null, string resource = "") where T : ICommand
         {
             var context = GetContext<T>(resourceId, resource);
-            await _busPublisher.SendAsync(command, context);
+            //await _busPublisher.SendAsync(command, context);
 
             return Accepted(context);
         }

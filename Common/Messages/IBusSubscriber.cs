@@ -1,7 +1,8 @@
 ﻿using Common.Messages;
 using System;
+using System.Threading.Tasks;
 
-namespace Common.RabbitMQ
+namespace Common.Messages
 {
     public interface IBusSubscriber
     {
@@ -9,7 +10,7 @@ namespace Common.RabbitMQ
             Func<TCommand, Exception, IRejectedEvent> onError = null)
             where TCommand : ICommand;
 
-        IBusSubscriber SubscribeEvent<TEvent>(string @namespace = null, string queueName = null,
+        Task<IBusSubscriber> SubscribeEvent<TEvent>(string @namespace = null, string queueName = null,
             Func<TEvent, Exception, IRejectedEvent> onError = null)
             where TEvent : IEvent;
     }

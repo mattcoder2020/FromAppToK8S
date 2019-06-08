@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependencyInjection", "Cons
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProductService", "ProductService", "{BF657732-0891-4B70-BBA3-658467D02451}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductService.IntegrationTest", "ProductServiceIntegrationTest\ProductService.IntegrationTest.csproj", "{E7B62CA4-BFBC-4A46-BFDC-CE15285B167A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService.IntegrationTest", "ProductServiceIntegrationTest\ProductService.IntegrationTest.csproj", "{E7B62CA4-BFBC-4A46-BFDC-CE15285B167A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

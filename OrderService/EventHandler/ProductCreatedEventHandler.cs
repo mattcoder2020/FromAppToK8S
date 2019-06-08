@@ -1,5 +1,6 @@
 ﻿using Common.Exceptions;
 using Common.Handlers;
+using Common.Messages;
 using Common.RabbitMQ;
 using Common.Repo;
 using OrderService.Events;
