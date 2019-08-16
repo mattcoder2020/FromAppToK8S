@@ -35,7 +35,7 @@ namespace ProductService.CommandHandlers
             }
             else
             {
-                //Send rejected bus message
+                await _messageBrokerFactory.Publisher.PublishAsync<RejectedEvent>(new RejectedEvent (command.Name + " already exists", command.Id.ToString()), context);
             }
             //appMetric.IncrementPostProductCount(); // 
 

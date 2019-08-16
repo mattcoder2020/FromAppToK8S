@@ -10,6 +10,7 @@ namespace ProductService.Commands
             public String Name { get; set; }
             public String Category { get; set; }
             public decimal Price { get; set; }
-            //public ICorrelationContext Context { get; set; }
+
+            public ICorrelationContext Context { get; set; }
     }
 }

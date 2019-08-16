@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DynamicDI.Models;
+using System.Net;
+using System.Net.Sockets;
 
 namespace DynamicDI.Controllers
 {
@@ -12,6 +14,9 @@ namespace DynamicDI.Controllers
     {
         public IActionResult Index()
         {
+            string DNS = Dns.GetHostName();
+            string IP = Dns.GetHostEntry(DNS).AddressList.FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork).ToString();
+            ViewBag.Message = "DNS: " + DNS + " IP:" + IP;
             return View();
         }
 

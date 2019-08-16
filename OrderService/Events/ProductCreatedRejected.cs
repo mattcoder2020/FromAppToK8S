@@ -11,6 +11,6 @@ namespace OrderService.Events
     {
         public string  Reason { get; set; }
         public string Code { get; set; }
-       // public ICorrelationContext Context { get; set; }
+        public ICorrelationContext Context { get; set; }
     }
 }

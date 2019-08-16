@@ -17,7 +17,7 @@ namespace Common.Metrics
         }
         protected override void ExecuteAsync(object state)
         {
-            log.LogInformation(DateTime.Now.ToLongTimeString());
+            //log.LogInformation(DateTime.Now.ToLongTimeString());
             gaugeMetric.SendGaugeData();
         }
     }

@@ -32,7 +32,7 @@ namespace ProductService.Controllers.API
         [AppMetricCount(MetricName: "post-new-product")]
         public async void Post([FromBody] NewProductCommand value)
         {
-           // value.Context = GetContext<NewProductCommand>(null, null);
+            value.Context = GetContext<NewProductCommand>(null, null);
             await _dispatcher.SendAsync<NewProductCommand>(value);
         }
     }

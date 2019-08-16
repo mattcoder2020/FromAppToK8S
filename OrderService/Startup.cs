@@ -63,7 +63,7 @@ namespace DynamicDI
             //app.UseRabbitMq().SubscribeEvent<ProductCreated>(@namespace : "matt-product", 
             //    onError: (message, exception)=>new ProductCreatedRejected { Code=message.Id.ToString(), Reason=exception.Message} );
 
-            app.UseMessageService().SubscribeEvent<ProductCreated>(@namespace: "mytopic", queueName : "order_productcreated",
+            app.UseMessageService().SubscribeEvent<ProductCreated>(@namespace: "Matt-Product", queueName : "Matt-Product",
                 onError: (message, exception) => new ProductCreatedRejected { Code = message.Id.ToString(), Reason = exception.Message });
             app.UseHttpsRedirection();
             app.UseStaticFiles();

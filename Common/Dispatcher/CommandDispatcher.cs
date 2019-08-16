@@ -17,8 +17,8 @@ namespace Common.Dispacher
         public async Task Dispatch<TCommand>(TCommand command ) where TCommand : ICommand
         {
             var CommandHandler = _context.Resolve<ICommandHandler<TCommand>>();
-            await CommandHandler.HandleAsync(command, CorrelationContext.Empty);
-            //await CommandHandler.HandleAsync(command, command.Context);
+            //await CommandHandler.HandleAsync(command, CorrelationContext.Empty);
+            await CommandHandler.HandleAsync(command, command.Context);
             //  return Task.CompletedTask;
 
         }

@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: D:\Software\kompose.exe convert
+    kompose.version: 1.17.0 (a74acad)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: orderservice
+  name: orderservice
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: orderservice
+    spec:
+      containers:
+      - env:
+        - name: CONSUL_ENABLED
+          value: "false"
+        - name: VAULT_ENABLED
+          value: "false"
+        image: orderservice
+        imagePullPolicy: Never
+        name: orderservice
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+status: {}

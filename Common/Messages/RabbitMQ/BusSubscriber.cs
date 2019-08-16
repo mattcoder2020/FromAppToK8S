@@ -129,6 +129,7 @@ namespace Common.RabbitMQ
             }
         }
 
+        //(@namespace: "Matt-Product", queueName : "ProductCreated",
         private string GetQueueName<T>(string @namespace = null, string name = null)
         {
             @namespace = string.IsNullOrWhiteSpace(@namespace)

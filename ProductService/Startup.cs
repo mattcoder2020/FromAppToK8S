@@ -46,6 +46,14 @@ namespace ProductService
             
             services.AddConsul();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", cors =>
+                        cors.AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials());
+            });
             services.AddJaeger();
             services.AddOpenTracing();
             services.AddGaugeMetric();
@@ -76,9 +84,10 @@ namespace ProductService
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            //app.UseStaticFiles();
-            //app.UseCookiePolicy();
+            app.UseStaticFiles();
+            app.UseCookiePolicy();
             //app.UseRabbitMq();
+            app.UseCors("CorsPolicy");
             app.UseMessageService();
            
 
