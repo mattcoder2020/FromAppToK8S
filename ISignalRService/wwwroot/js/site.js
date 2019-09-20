@@ -7,8 +7,8 @@ let connection = null;
 
 setupConnection = () => {
     connection = new signalR.HubConnectionBuilder()
-        //////.withUrl("http://signalr.internal.com:30503/matt")
-        .withUrl("http://localhost:5000/matt")
+        .withUrl("http://signalr.internal.com:30503/matt")
+        /////.withUrl("http://localhost:5000/matt")
         .build();
 
    
@@ -46,7 +46,8 @@ document.getElementById("submit").addEventListener("click", e => {
     var category = document.getElementById("category").value;
     var price = document.getElementById("price").value;
 
-    fetch("http://localhost:5002/api/product",
+    //fetch("http://localhost:5002/api/product",
+    fetch("http://product.internal.com:30503/api/product",
         {
             method: "POST",
             body: JSON.stringify({ id, name, category, price }),
