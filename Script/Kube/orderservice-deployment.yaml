@@ -2,8 +2,9 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: D:\Software\kompose.exe convert
+    kompose.cmd: kompose convert -f docker-compose.yml
     kompose.version: 1.17.0 (a74acad)
+    traefik.frontend.rule: 'AddPrefix: /order'
   creationTimestamp: null
   labels:
     io.kompose.service: orderservice
@@ -23,8 +24,8 @@ spec:
           value: "false"
         - name: VAULT_ENABLED
           value: "false"
-        image: orderservice
-        imagePullPolicy: Never
+        image: mattcoder/fromapp-to-k8s:orderservice
+        imagePullPolicy: Always
         name: orderservice
         ports:
         - containerPort: 80

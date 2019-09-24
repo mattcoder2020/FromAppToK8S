@@ -22,14 +22,14 @@ spec:
       - path: /
         backend:
           serviceName: productservice
-          servicePort: 5000
+          servicePort: 5002
   - host: signalr.internal.com
     http:
       paths:
       - path: /
         backend:
           serviceName: isignalrservice
-          servicePort: 5002
+          servicePort: 5000
   - host: manage.rabbitmq.internal.com
     http:
       paths:
@@ -37,7 +37,7 @@ spec:
         backend:
           serviceName: rabbitmq
           servicePort: 15672
-  - host: jaeger
+  - host: manage.jaeger.internal.com
     http:
       paths:
       - path: /
@@ -58,10 +58,4 @@ spec:
         backend:
           serviceName: grafana
           servicePort: 3000
-  - host: manage.influxdb.internal.com
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: influxdb
-          servicePort: 8086
+  

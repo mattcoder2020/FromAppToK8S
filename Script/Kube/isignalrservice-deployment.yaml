@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: D:\Software\kompose.exe convert
+    kompose.cmd: kompose convert -f docker-compose.yml
     kompose.version: 1.17.0 (a74acad)
   creationTimestamp: null
   labels:
@@ -23,8 +23,8 @@ spec:
           value: "false"
         - name: VAULT_ENABLED
           value: "false"
-        image: isignalrservice
-        imagePullPolicy: Never
+        image: mattcoder/fromapp-to-k8s:isignalrservice
+        imagePullPolicy: Always
         name: isignalrservice
         ports:
         - containerPort: 80

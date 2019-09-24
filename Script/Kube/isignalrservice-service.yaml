@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    kompose.cmd: D:\Software\kompose.exe convert
+    kompose.cmd: D:\Software\kompose.exe convert -f docker-compose.yml
     kompose.version: 1.17.0 (a74acad)
   creationTimestamp: null
   labels:
@@ -10,8 +10,8 @@ metadata:
   name: isignalrservice
 spec:
   ports:
-  - name: "5002"
-    port: 5002
+  - name: "5000"
+    port: 5000
     targetPort: 80
   selector:
     io.kompose.service: isignalrservice
