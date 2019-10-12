@@ -2,7 +2,7 @@ version: "3.0"
 
 services:
   productservice:
-    image: productservice
+    image: mattcoder/fromapp-to-k8s:productservice
     container_name: productservice
     ports:
       - 5002:80
@@ -19,7 +19,7 @@ services:
       - 'VAULT_ENABLED=false'
 
   orderservice:
-    image: orderservice
+    image: mattcoder/fromapp-to-k8s:orderservice
     container_name: orderservice
     ports:
       - 5001:80  
@@ -38,7 +38,7 @@ services:
       - "traefik.frontend.rule=AddPrefix: /order"
 
   isignalrservice:
-    image: isignalrservice
+    image: mattcoder/fromapp-to-k8s:isignalrservice
     container_name: isignalrservice
     ports:
       - 5000:80  
