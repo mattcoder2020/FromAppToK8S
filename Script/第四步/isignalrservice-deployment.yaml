@@ -6,8 +6,8 @@ metadata:
     kompose.version: 1.17.0 (a74acad)
   creationTimestamp: null
   labels:
-    io.kompose.service: productservice
-  name: productservice
+    io.kompose.service: isignalrservice
+  name: isignalrservice
 spec:
   replicas: 1
   strategy: {}
@@ -15,7 +15,7 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: productservice
+        io.kompose.service: isignalrservice
     spec:
       containers:
       - env:
@@ -23,16 +23,11 @@ spec:
           value: "false"
         - name: VAULT_ENABLED
           value: "false"
-        image:  mattcoder/fromapp-to-k8s:productservice
-        imagePullPolicy: Always
-        name: productservice
+        image: isignalrservice
+        imagePullPolicy: Never
+        name: isignalrservice
         ports:
         - containerPort: 80
         resources: {}
-        resources:
-          requests:
-            cpu: "100m"
-          limits:
-            cpu: "100m"
       restartPolicy: Always
 status: {}

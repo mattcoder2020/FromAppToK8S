@@ -4,18 +4,19 @@ metadata:
   annotations:
     kompose.cmd: kompose convert -f docker-compose.yml
     kompose.version: 1.17.0 (a74acad)
+    traefik.frontend.rule: 'AddPrefix: /order'
   creationTimestamp: null
   labels:
-    io.kompose.service: productservice
-  name: productservice
+    io.kompose.service: orderservice
+  name: orderservice
 spec:
-  replicas: 1
+  replicas: 3
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: productservice
+        io.kompose.service: orderservice
     spec:
       containers:
       - env:
@@ -23,16 +24,11 @@ spec:
           value: "false"
         - name: VAULT_ENABLED
           value: "false"
-        image:  mattcoder/fromapp-to-k8s:productservice
-        imagePullPolicy: Always
-        name: productservice
+        image: orderservice
+        imagePullPolicy: Never
+        name: orderservice
         ports:
         - containerPort: 80
         resources: {}
-        resources:
-          requests:
-            cpu: "100m"
-          limits:
-            cpu: "100m"
       restartPolicy: Always
 status: {}

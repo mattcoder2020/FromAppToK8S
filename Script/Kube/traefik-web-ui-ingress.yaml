@@ -5,8 +5,6 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: traefik
     traefik.ingress.kubernetes.io/rule-type: "PathPrefixStrip"
-    ingress.kubernetes.io/add-base-url: "true"
-    #traefik.frontend.rule.type: "PathPrefix"
 spec:
   rules:
   - host: order.internal.com
@@ -37,7 +35,7 @@ spec:
         backend:
           serviceName: rabbitmq
           servicePort: 15672
-  - host: manage.jaeger.internal.com
+  - host: jaeger
     http:
       paths:
       - path: /
@@ -58,4 +56,10 @@ spec:
         backend:
           serviceName: grafana
           servicePort: 3000
-  
+  - host: manage.influxdb.internal.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: influxdb
+          servicePort: 8086

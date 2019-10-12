@@ -23,16 +23,11 @@ spec:
           value: "false"
         - name: VAULT_ENABLED
           value: "false"
-        image:  mattcoder/fromapp-to-k8s:productservice
-        imagePullPolicy: Always
+        image: productservice
+        imagePullPolicy: Never
         name: productservice
         ports:
         - containerPort: 80
         resources: {}
-        resources:
-          requests:
-            cpu: "100m"
-          limits:
-            cpu: "100m"
       restartPolicy: Always
 status: {}
