@@ -4,7 +4,48 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome to <img src="~/images/product.png" /> Service</h1>
-    
-    <p><font size="15">@ViewBag.Message</font></p>
+    <p><font size="8">@ViewBag.Message</font></p>
+    <p style="text-align:left;font-size:large; font-weight:bold">Create a new Product</p>
+    <form>
+        <div>
+            <div class="form-group col-md-12">
+                <label htmlFor="product">Id?</label>
+                <input type="text"
+                       id="id"
+                       class="form-control" />
+            </div>
+            <div class="form-group col-md-12">
+                <label htmlFor="size">Name</label>
+                <input type="text"
+                       id="name"
+                       class="form-control"
+                       value="Beauty Queen" />
+            </div>
+            <div class="form-group col-md-12">
+                <label htmlFor="price">Price</label>
+                <input type="text"
+                       id="price"
+                       class="form-control"
+                       value="100" />
+            </div>
+            <div class="form-group col-md-12">
+                <label htmlFor="Category">Category</label>
+                <input type="text"
+                       id="category"
+                       class="form-control"
+                       value="Category1" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button id="submit" type="submit" class="btn btn-primary">
+                    Submit
+                </button>
+            </div>
+            <div class="col-md-6">
+                <div id="status" style="color:red"></div>
+            </div>
+        </div>
+    </form>
 
 </div>

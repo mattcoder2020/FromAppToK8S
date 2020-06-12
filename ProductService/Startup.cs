@@ -36,14 +36,14 @@ namespace ProductService
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            //services.Configure<CookiePolicyOptions>(options =>
-            //{
-            //    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-            //    options.CheckConsentNeeded = context => true;
-            //    options.MinimumSameSitePolicy = SameSiteMode.None;
-            //});
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
 
-            
+
             services.AddConsul();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddCors(options =>
@@ -108,6 +108,11 @@ namespace ProductService
                 client.Agent.ServiceDeregister(consulServiceId);
                // Container.Dispose();
             }); ;
+        }
+
+        public void dosomething()
+        {
+            System.Diagnostics.Debug.WriteLine("Here is what we done for the waydev test");
         }
     }
 }

@@ -17,11 +17,11 @@ E:\misc\Source Code\DynamicDependencyInjection\DynamicDI\Common\obj\Debug\netcor
 E:\misc\Source Code\DynamicDependencyInjection\DynamicDI\Common\obj\Debug\netcoreapp2.2\Common.dll
 E:\misc\Source Code\DynamicDependencyInjection\DynamicDI\Common\obj\Debug\netcoreapp2.2\Common.pdb
 D:\SourceCode\Git-FromAppToK8S\FromAppToK8S\Common\bin\Debug\netcoreapp2.2\Common.deps.json
+D:\SourceCode\Git-FromAppToK8S\FromAppToK8S\Common\bin\Debug\netcoreapp2.2\Common.dll
+D:\SourceCode\Git-FromAppToK8S\FromAppToK8S\Common\bin\Debug\netcoreapp2.2\Common.pdb
+D:\SourceCode\Git-FromAppToK8S\FromAppToK8S\Common\obj\Debug\netcoreapp2.2\Common.csproj.CoreCompileInputs.cache
+D:\SourceCode\Git-FromAppToK8S\FromAppToK8S\Common\obj\Debug\netcoreapp2.2\Common.AssemblyInfoInputs.cache
 D:\SourceCode\Git-FromAppToK8S\FromAppToK8S\Common\obj\Debug\netcoreapp2.2\Common.AssemblyInfo.cs
 D:\SourceCode\Git-FromAppToK8S\FromAppToK8S\Common\obj\Debug\netcoreapp2.2\Common.dll
 D:\SourceCode\Git-FromAppToK8S\FromAppToK8S\Common\obj\Debug\netcoreapp2.2\Common.pdb
-D:\SourceCode\Git-FromAppToK8S\FromAppToK8S\Common\bin\Debug\netcoreapp2.2\Common.dll
-D:\SourceCode\Git-FromAppToK8S\FromAppToK8S\Common\bin\Debug\netcoreapp2.2\Common.pdb
 D:\SourceCode\Git-FromAppToK8S\FromAppToK8S\Common\obj\Debug\netcoreapp2.2\Common.csprojAssemblyReference.cache
-D:\SourceCode\Git-FromAppToK8S\FromAppToK8S\Common\obj\Debug\netcoreapp2.2\Common.csproj.CoreCompileInputs.cache
-D:\SourceCode\Git-FromAppToK8S\FromAppToK8S\Common\obj\Debug\netcoreapp2.2\Common.AssemblyInfoInputs.cache

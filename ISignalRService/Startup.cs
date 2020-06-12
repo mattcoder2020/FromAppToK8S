@@ -73,13 +73,19 @@ namespace ISignalRService
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            app.UseCors("CorsPolicy");
+           
             app.UseSignalR(routes =>
             {
                 routes.MapHub<MattHub>($"/matt");
             });
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            //app.UseCors("CorsPolicy");
+            app.UseCors(cors =>
+                        cors.AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials());
             app.UseMessageService().SubscribeEvent<RejectedEvent>(@namespace: "Matt-SignalR", queueName: "Matt-Product");
             app.UseMvc(routes =>
             {
@@ -93,7 +99,12 @@ namespace ISignalRService
         {
             var options = Configuration.GetOptions<SignalrOptions>("signalr");
             services.AddSingleton(options);
-            var builder = services.AddSignalR();
+            var builder = services.AddSignalR(
+                o =>
+                {
+                    o.EnableDetailedErrors = true;
+                }
+                );
             if (!options.Backplane.Equals("redis", StringComparison.InvariantCultureIgnoreCase))
             {
                 return;

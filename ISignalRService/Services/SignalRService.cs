@@ -1,5 +1,6 @@
 ﻿using Common.Messages;
 using ISignalRService.Hub;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,11 @@ using System.Threading.Tasks;
 
 namespace ISignalRService.Services
 {
+    [EnableCors("CorsPolicy")]
     public class SignalRService : IiSignalRService
     {
         IHubContext<MattHub> _hub;
+        
         public SignalRService(IHubContext<MattHub> hub)
         {
             _hub = hub;

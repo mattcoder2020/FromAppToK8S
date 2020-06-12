@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 
 namespace ISignalRService.Hub
 {
+    [EnableCors("CorsPolicy")]
     public class MattHub: Microsoft.AspNetCore.SignalR.Hub
     {
         public async void Initialize(string productid)
