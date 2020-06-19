@@ -10,6 +10,12 @@ using System.Threading.Tasks;
 
 namespace ProductService.CommandHandlers
 {
+    public class ABC
+    {
+        public void abc()
+        {}
+    }
+
     public class NewProductCommandHandler : ICommandHandler<NewProductCommand>
     {
         private readonly IMessageBrokerFactory _messageBrokerFactory;
