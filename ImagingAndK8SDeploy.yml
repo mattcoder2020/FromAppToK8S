@@ -24,10 +24,26 @@ stages:
     steps:
     - task: Docker@2
       inputs:
-        containerRegistry: 'dockerhub-mattcoder'
-        repository: 'mattcoder/currency-exchange'
+        containerRegistry: 'dockerhub-fromapptok8s'
+        repository: 'mattcoder/fromapp-to-k8s'
         command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile'
+        Dockerfile: '**/productservice-dockerfile'
+        tags: '$(tag)'
+        
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'dockerhub-fromapptok8s'
+        repository: 'mattcoder/fromapp-to-k8s'
+        command: 'buildAndPush'
+        Dockerfile: '**/orderservice-dockerfile'
+        tags: '$(tag)'
+
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'dockerhub-fromapptok8s'
+        repository: 'mattcoder/fromapp-to-k8s'
+        command: 'buildAndPush'
+        Dockerfile: '**/isignalrservice-dockerfile'
         tags: '$(tag)'
     - task: CopyFiles@2
       inputs:
