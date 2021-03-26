@@ -1,0 +1,81 @@
+
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+
+stages:
+
+# Stage 1
+# Build Docker Image
+# Publish the K8S Files
+
+- stage: Build
+  displayName: Build image
+  jobs:  
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'dockerhub-fromapptok8s'
+        repository: 'mattcoder/fromapp-to-k8s'
+        command: 'buildAndPush'
+        Dockerfile: '**/productservice-dockerfile'
+        tags: 'productservice'
+        
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'dockerhub-fromapptok8s'
+        repository: 'mattcoder/fromapp-to-k8s'
+        command: 'buildAndPush'
+        Dockerfile: '**/orderservice-dockerfile'
+        tags: 'orderservice'
+
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'dockerhub-fromapptok8s'
+        repository: 'mattcoder/fromapp-to-k8s'
+        command: 'buildAndPush'
+        Dockerfile: '**/isignalrservice-dockerfile'
+        tags: 'isignalrservice'
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)/K8SScript/'
+        Contents: '**/*.yaml'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'manifests'
+        publishLocation: 'Container'
+- stage: Deploy
+  displayName: Deploy image
+  jobs:  
+  - job: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'manifests'
+        itemPattern: '**/*.yaml'
+        targetPath: '$(System.ArtifactsDirectory)'
+    - task: KubernetesManifest@0
+      inputs:
+        action: 'deploy'
+        kubernetesServiceConnection: 'k8stest_dev_connection'
+        namespace: 'default'
+        manifests: '$(System.ArtifactsDirectory)/*.yaml'
+        #containers: 'mattcoder/currency-exchange:$(tag)'
+# Stage 2
+# Download the K8S Files
+# Deploy to K8S Cluster with Docker Image
