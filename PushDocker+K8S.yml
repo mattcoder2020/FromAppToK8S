@@ -24,7 +24,7 @@ stages:
     steps:
     - task: Docker@2
       inputs:
-        containerRegistry: 'dockerhub-fromapptok8s'
+        containerRegistry: 'dockerhub-mattcoder'
         repository: 'mattcoder/fromapp-to-k8s'
         command: 'buildAndPush'
         Dockerfile: '**/productservice-dockerfile'
