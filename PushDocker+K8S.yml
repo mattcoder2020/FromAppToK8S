@@ -22,29 +22,6 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'dockerhub-mattcoder'
-        repository: 'mattcoder/fromapp-to-k8s'
-        command: 'buildAndPush'
-        Dockerfile: '**/productservice-dockerfile'
-        tags: 'productservice'
-        
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'dockerhub-mattcoder'
-        repository: 'mattcoder/fromapp-to-k8s'
-        command: 'buildAndPush'
-        Dockerfile: '**/orderservice-dockerfile'
-        tags: 'orderservice'
-
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'dockerhub-mattcoder'
-        repository: 'mattcoder/fromapp-to-k8s'
-        command: 'buildAndPush'
-        Dockerfile: '**/isignalrservice-dockerfile'
-        tags: 'isignalrservice'
     - task: CopyFiles@2
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)/K8SScript/'
