@@ -44,14 +44,15 @@ stages:
       inputs:
         buildType: 'current'
         artifactName: 'manifests'
-        itemPattern: '**/*.yaml'
+        itemPattern: '**/*.yaml1'
         targetPath: '$(System.ArtifactsDirectory)'
     - task: KubernetesManifest@0
       inputs:
         action: 'deploy'
         kubernetesServiceConnection: 'k8stest_dev_connection'
         namespace: 'default'
-        manifests: '$(System.ArtifactsDirectory)/*.yaml'
+        manifests: '$(System.DefaultWorkingDirectory)/K8SScript/*.yaml'
+        #manifests: '$(System.ArtifactsDirectory)/*.yaml'
         #containers: 'mattcoder/currency-exchange:$(tag)'
 # Stage 2
 # Download the K8S Files
