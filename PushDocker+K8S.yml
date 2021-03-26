@@ -51,7 +51,7 @@ stages:
         action: 'deploy'
         kubernetesServiceConnection: 'k8stest_dev_connection'
         namespace: 'default'
-        manifests: '$(System.DefaultWorkingDirectory)/K8SScript/*.yaml'
+        manifests: '$(System.DefaultWorkingDirectory)/K8SScript/'
         #manifests: '$(System.ArtifactsDirectory)/*.yaml'
         #containers: 'mattcoder/currency-exchange:$(tag)'
 # Stage 2
